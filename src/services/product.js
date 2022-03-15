@@ -12,6 +12,18 @@ productsRouter.get("/", async (req, res, next) => {
   }
 });
 
+productsRouter.get("/:id", async (req, res, next) => {
+  try {
+    const data = await pool.query(
+      "SELECT * FROM product WHERE product_id=$1;",
+      [req.params.id]
+    );
+    res.send(data.rows[0]);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 productsRouter.post("/", async (req, res, next) => {
   try {
     const data = await pool.query(

@@ -12,6 +12,17 @@ reviewsRouter.get("/", async (req, res, next) => {
   }
 });
 
+reviewsRouter.get("/:id", async (req, res, next) => {
+  try {
+    const data = await pool.query("SELECT * FROM review WHERE comment_id=$1;", [
+      req.params.id,
+    ]);
+    res.send(data.rows);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 reviewsRouter.post("/", async (req, res, next) => {
   try {
     const data = await pool.query(
